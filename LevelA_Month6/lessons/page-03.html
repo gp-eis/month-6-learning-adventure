@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Can I Help You? — Pet Groomer Month</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <div class="floaties" aria-hidden="true">
+    <span style="top:12%; left:4%;">🛍️</span>
+    <span style="top:70%; left:94%;">🐾</span>
+  </div>
+
+  <div class="page">
+    <a class="back-link" href="../Month 6 Level A.html?week=3">⬅️ Week 3 Menu</a>
+
+    <header class="center" style="margin-top:16px;">
+      <h1 class="big-title" style="font-size:2.4rem;">🛍️ Week 3 — How Can I Help You?</h1>
+      <nav class="week-tools" aria-label="Week tools"><a class="pill-btn blue" href="flashcards.html?week=3">&#127183; Flashcards</a></nav>
+    </header>
+
+    <!-- ============ BOOK PAGE IMAGE ============ -->
+    <section class="card" style="margin-top:24px;">
+      <h2 class="section-title">📖 Book Page</h2>
+      <img
+        class="lesson-image"
+        src="../assets/images/week-3/page-03.png"
+        alt="Illustrated pet-store lesson page showing a leash, water bowl, food, toys, blanket, carrier, and collar."
+      >
+    </section>
+
+    <!-- ============ 3D ANIMATED VERSION ============ -->
+    <section class="card" style="margin-top:24px;">
+      <h2 class="section-title">✨ 3D Animated Version</h2>
+      <div class="placeholder">
+        <span class="emoji">🎬</span>
+        <span>3D animated version goes here</span>
+        <small>Add your video to assets/video/week-3/ and swap this box for the video element below.</small>
+      </div>
+      <video id="dialogue-video" hidden controls style="width:100%; border-radius:24px; margin-top:12px;"></video>
+      <!-- <video controls style="width:100%; border-radius:24px;" src="../assets/video/week-3/page-03-3d.mp4"></video> -->
+    </section>
+
+    <!-- ============ DIALOGUE BUTTONS ============ -->
+    <!--
+      To hook up real audio later, add:  data-audio="../assets/audio/page-03-line-1.mp3"
+      To play a video instead, add:      data-video="../assets/video/week-3/page-03-line-1.mp4"
+    -->
+    <section class="card center" style="margin-top:24px;">
+      <h2 class="section-title">💬 Tap to Hear!</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
+        <button class="pill-btn"        data-dialogue data-line="Dialogue 1 coming soon!">🔊 Dialogue 1</button>
+        <button class="pill-btn orange" data-dialogue data-line="Dialogue 2 coming soon!">🔊 Dialogue 2</button>
+        <button class="pill-btn blue"   data-dialogue data-line="Dialogue 3 coming soon!">🔊 Dialogue 3</button>
+      </div>
+    </section>
+
+    <!-- ============ PREV / NEXT ============ -->
+    <nav class="page-nav">
+      <a class="pill-btn green" href="page-02.html">⬅️ Previous Week</a>
+      <span class="spacer"></span>
+      <a class="pill-btn green" href="page-04.html">Next Week ➡️</a>
+    </nav>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

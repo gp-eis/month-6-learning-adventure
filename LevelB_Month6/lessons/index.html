@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lessons 📖 — Farmer Month</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    body { background: linear-gradient(180deg, #8edcff 0%, #c8eeff 45%, #d8f5c0 100%); }
+
+    .bokeh {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .bokeh span {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 34% 30%,
+                  rgba(255, 255, 255, .9),
+                  rgba(255, 255, 255, .35) 58%,
+                  rgba(255, 255, 255, 0) 72%);
+      animation: bokeh-drift 16s ease-in-out infinite;
+    }
+    .bokeh span:nth-child(1) { width: 260px; height: 260px; top: -70px;  left: -60px; }
+    .bokeh span:nth-child(2) { width: 150px; height: 150px; top: 12%;    right: 8%;   animation-duration: 21s; }
+    .bokeh span:nth-child(3) { width: 90px;  height: 90px;  top: 46%;    left: 6%;    animation-duration: 13s; }
+    .bokeh span:nth-child(4) { width: 200px; height: 200px; bottom: -60px; right: 12%; animation-duration: 24s; }
+    .bokeh span:nth-child(5) { width: 70px;  height: 70px;  bottom: 18%; left: 22%;   animation-duration: 18s; }
+    .bokeh span:nth-child(6) { width: 120px; height: 120px; top: 60%;    right: 4%;   animation-duration: 15s; }
+
+    @keyframes bokeh-drift {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-26px) scale(1.06); }
+    }
+
+    .hub-header { margin-top: 18px; }
+
+    .hub-title {
+      font-size: clamp(2.6rem, 7vw, 4.2rem);
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--barn-red);
+      -webkit-text-stroke: 10px #ffffff;
+      paint-order: stroke fill;
+      text-shadow: 0 7px 0 rgba(196, 58, 40, .22), 0 14px 22px rgba(196, 58, 40, .22);
+    }
+
+    .hub-title .emoji {
+      -webkit-text-stroke: 0;
+      margin-right: 10px;
+      filter: drop-shadow(0 6px 8px rgba(74, 59, 82, .25));
+    }
+
+    .hub-subtitle {
+      margin-top: 10px;
+      font-size: clamp(1.05rem, 2.5vw, 1.45rem);
+      font-weight: 800;
+      color: var(--earth-d);
+      -webkit-text-stroke: 6px #ffffff;
+      paint-order: stroke fill;
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 26px;
+      margin-top: 36px;
+    }
+
+    .week-card {
+      display: block;
+      padding: 10px;
+      border-radius: 46px;
+      text-decoration: none;
+      color: var(--text);
+      background: linear-gradient(180deg, var(--frame-light), var(--frame));
+      filter: drop-shadow(0 14px 15px rgba(74, 59, 82, .22));
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .week-card:hover {
+      transform: translateY(-8px) rotate(-1deg);
+      filter: drop-shadow(0 22px 18px rgba(74, 59, 82, .28)) brightness(1.04);
+    }
+    .week-card:active {
+      transform: translateY(3px);
+      filter: drop-shadow(0 8px 10px rgba(74, 59, 82, .2));
+    }
+    .week-card:focus-visible {
+      outline: 6px solid #ffffff;
+      outline-offset: 5px;
+    }
+
+    /* Image-based week cards (optional full-card artwork) */
+    .week-card__image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 36px;
+    }
+
+    .week-card__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 22px 16px 26px;
+      border-radius: 36px;
+      background: linear-gradient(180deg, #ffffff, #fffbf5);
+    }
+
+    .week-card__icon {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 108px;
+      height: 108px;
+      border-radius: 30px;
+      font-size: 3.3rem;
+      background: linear-gradient(160deg, var(--frame-light), var(--frame));
+      box-shadow: inset 0 5px 12px rgba(255, 255, 255, .8),
+                  inset 0 -9px 16px rgba(0, 0, 0, .12),
+                  0 8px 14px rgba(74, 59, 82, .18);
+    }
+    .week-card__icon::after {
+      content: '';
+      position: absolute;
+      inset: 7px 7px 52% 7px;
+      border-radius: 23px 23px 40px 40px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0));
+    }
+
+    .week-card__label {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #3f3350;
+    }
+
+    .week-card__hint {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 1.02rem;
+      line-height: 1.28;
+      color: #5c4f6e;
+      text-align: center;
+    }
+
+    .week-card.red    { --frame: #e85d4a; --frame-light: #ff8a78; --frame-dark: #c43a28; }
+    .week-card.blue   { --frame: #5ec8f2; --frame-light: #93dcff; --frame-dark: #1f8fc4; }
+    .week-card.green  { --frame: #7ed957; --frame-light: #aeec8d; --frame-dark: #4ea62c; }
+    .week-card.wheat  { --frame: #f5c842; --frame-light: #ffe088; --frame-dark: #d4a020; }
+
+    .back-link {
+      font-size: 1.15rem;
+      padding: 12px 28px;
+      box-shadow: 0 6px 0 rgba(42, 159, 214, .3), 0 12px 20px rgba(42, 159, 214, .18);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bokeh" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="floaties" aria-hidden="true">
+    <span style="top:14%; left:92%;">🌾</span>
+    <span style="top:24%; left:96%;">🐄</span>
+    <span style="top:78%; left:4%;">🚜</span>
+  </div>
+
+  <div class="page">
+    <a class="back-link" href="../Month 6 Level B.html">⬅️ Home</a>
+
+    <header class="hub-header center">
+      <h1 class="hub-title"><span class="emoji">📖</span>Lessons</h1>
+      <p class="hub-subtitle">Pick a week to read together!</p>
+    </header>
+
+    <div class="week-grid">
+      <a class="week-card red" href="page-01.html" aria-label="Week 1 — What Do You Grow?">
+        <div class="week-card__inner">
+          <div class="week-card__icon" aria-hidden="true">🌱</div>
+          <span class="week-card__label">Week 1</span>
+          <span class="week-card__hint">What Do You Grow?</span>
+        </div>
+      </a>
+      <a class="week-card blue" href="page-02.html" aria-label="Week 2 — Where Is It From?">
+        <div class="week-card__inner">
+          <div class="week-card__icon" aria-hidden="true">🌍</div>
+          <span class="week-card__label">Week 2</span>
+          <span class="week-card__hint">Where Is It From?</span>
+        </div>
+      </a>
+      <a class="week-card green" href="page-03.html" aria-label="Week 3 — What Do Plants Need?">
+        <div class="week-card__inner">
+          <div class="week-card__icon" aria-hidden="true">☀️</div>
+          <span class="week-card__label">Week 3</span>
+          <span class="week-card__hint">What Do Plants Need?</span>
+        </div>
+      </a>
+      <a class="week-card wheat" href="page-04.html" aria-label="Week 4 — It's Time to Wake Up!">
+        <div class="week-card__inner">
+          <div class="week-card__icon" aria-hidden="true">🌅</div>
+          <span class="week-card__label">Week 4</span>
+          <span class="week-card__hint">It's Time to Wake Up!</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

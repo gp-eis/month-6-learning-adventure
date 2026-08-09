@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games 🎮 — Farmer Month</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 26px;
+      margin-top: 32px;
+    }
+    .week-pick-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 46px;
+      text-decoration: none;
+      color: var(--text);
+      background: linear-gradient(180deg, var(--frame-light), var(--frame));
+      filter: drop-shadow(0 14px 15px rgba(74, 59, 82, .22));
+      cursor: pointer;
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .week-pick-btn:hover {
+      transform: translateY(-8px) rotate(-1deg);
+      filter: drop-shadow(0 22px 18px rgba(74, 59, 82, .28)) brightness(1.04);
+    }
+    .week-pick-btn:active {
+      transform: translateY(3px);
+      filter: drop-shadow(0 8px 10px rgba(74, 59, 82, .2));
+    }
+    .week-pick-btn:focus-visible {
+      outline: 6px solid var(--sun);
+      outline-offset: 5px;
+    }
+    .week-pick-btn__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 22px 16px 26px;
+      border-radius: 36px;
+      background: linear-gradient(180deg, #ffffff, #fffbf5);
+    }
+    .week-pick-btn__icon {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 108px;
+      height: 108px;
+      border-radius: 30px;
+      font-size: 3.3rem;
+      background: linear-gradient(160deg, var(--frame-light), var(--frame));
+      box-shadow: inset 0 5px 12px rgba(255, 255, 255, .8),
+                  inset 0 -9px 16px rgba(0, 0, 0, .12),
+                  0 8px 14px rgba(74, 59, 82, .18);
+    }
+    .week-pick-btn__icon::after {
+      content: '';
+      position: absolute;
+      inset: 7px 7px 52% 7px;
+      border-radius: 23px 23px 40px 40px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0));
+    }
+    .week-pick-btn__label {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #3f3350;
+    }
+    .week-pick-btn__hint {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 1.02rem;
+      line-height: 1.28;
+      color: #5c4f6e;
+      text-align: center;
+    }
+    .week-pick-btn.red   { --frame: #e85d4a; --frame-light: #ff8a78; }
+    .week-pick-btn.blue  { --frame: #5ec8f2; --frame-light: #93dcff; }
+    .week-pick-btn.green { --frame: #7ed957; --frame-light: #aeec8d; }
+    .week-pick-btn.wheat { --frame: #f5c842; --frame-light: #ffe088; }
+
+    .week-games-panel[hidden] { display: none; }
+    .week-games-panel {
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.7);
+      box-shadow: 0 8px 0 rgba(74,59,82,.08);
+      animation: panel-in .35s ease;
+    }
+    .week-games-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .week-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--earth-d);
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 800;
+    }
+    .week-number {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--sun);
+      color: var(--text);
+      box-shadow: 0 5px 0 var(--sun-d);
+    }
+    .week-games-panel[data-week="2"] .week-number { background: var(--sky); box-shadow: 0 5px 0 var(--sky-d); color: var(--white); }
+    .week-games-panel[data-week="3"] .week-number { background: var(--grass); box-shadow: 0 5px 0 var(--grass-d); color: var(--white); }
+    .week-games-panel[data-week="4"] .week-number { background: var(--barn-red); box-shadow: 0 5px 0 var(--barn-d); color: var(--white); }
+    @keyframes panel-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 520px) {
+      .week-games-panel { padding: 17px 12px; }
+      .week-number { width: 42px; height: 42px; }
+      .nav-card .icon-img { width: 72px; height: 72px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floaties" aria-hidden="true">
+    <span style="top:10%; left:5%;">🎮</span>
+    <span style="top:25%; left:90%;">🌾</span>
+    <span style="top:65%; left:3%;">⭐</span>
+    <span style="top:80%; left:93%;">🐔</span>
+  </div>
+
+  <div class="page">
+    <a class="back-link" href="../Month 6 Level B.html">⬅️ Home</a>
+
+    <header class="center" style="margin-top:20px;">
+      <h1 class="big-title">🎮 Games</h1>
+      <p class="subtitle" id="hub-subtitle">Pick a week, then choose a game!</p>
+    </header>
+
+    <section id="week-picker" aria-label="Choose a week">
+      <div class="week-grid">
+        <button class="week-pick-btn red" type="button" data-week="1" aria-label="Week 1 games — What Do You Grow?">
+          <span class="week-pick-btn__inner">
+            <span class="week-pick-btn__icon" aria-hidden="true">🌱</span>
+            <span class="week-pick-btn__label">Week 1</span>
+            <span class="week-pick-btn__hint">What Do You Grow?</span>
+          </span>
+        </button>
+        <button class="week-pick-btn blue" type="button" data-week="2" aria-label="Week 2 games — Where Is It From?">
+          <span class="week-pick-btn__inner">
+            <span class="week-pick-btn__icon" aria-hidden="true">🌍</span>
+            <span class="week-pick-btn__label">Week 2</span>
+            <span class="week-pick-btn__hint">Where Is It From?</span>
+          </span>
+        </button>
+        <button class="week-pick-btn green" type="button" data-week="3" aria-label="Week 3 games — What Do Plants Need?">
+          <span class="week-pick-btn__inner">
+            <span class="week-pick-btn__icon" aria-hidden="true">☀️</span>
+            <span class="week-pick-btn__label">Week 3</span>
+            <span class="week-pick-btn__hint">What Do Plants Need?</span>
+          </span>
+        </button>
+        <button class="week-pick-btn wheat" type="button" data-week="4" aria-label="Week 4 games — It's Time to Wake Up!">
+          <span class="week-pick-btn__inner">
+            <span class="week-pick-btn__icon" aria-hidden="true">🌅</span>
+            <span class="week-pick-btn__label">Week 4</span>
+            <span class="week-pick-btn__hint">It's Time to Wake Up!</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section class="week-games-panel" id="week-1-games" data-week="1" hidden aria-label="Week 1 games">
+      <div class="week-games-header">
+        <h2 class="week-heading"><span class="week-number">1</span> Week 1</h2>
+        <button class="pill-btn orange back-weeks" type="button">⬅️ All Weeks</button>
+      </div>
+      <div class="card-grid">
+        <a class="nav-card" href="memory.html">
+          <img class="icon-img" src="../assets/images/ui/game-memory.png" alt=""><span class="label">Memory Game</span>
+          <span class="hint">Find the matching pictures!</span>
+        </a>
+        <a class="nav-card" href="spin-the-wheel.html">
+          <img class="icon-img" src="../assets/images/ui/game-wheel.png" alt=""><span class="label">Spin the Wheel</span>
+          <span class="hint">Spin, stop, and flip a card!</span>
+        </a>
+        <a class="nav-card" href="matching.html">
+          <img class="icon-img" src="../assets/images/ui/game-matching.png" alt=""><span class="label">Matching Pairs</span>
+          <span class="hint">Match the farm items!</span>
+        </a>
+        <a class="nav-card" href="quiz.html">
+          <img class="icon-img" src="../assets/images/ui/game-happy.png" alt=""><span class="label">Happy Quiz</span>
+          <span class="hint">Help the farmer!</span>
+        </a>
+        <a class="nav-card" href="pick-the-right-one.html">
+          <img class="icon-img" src="../assets/images/ui/game-pick.png" alt=""><span class="label">Pick the Right One</span>
+          <span class="hint">Listen and choose the answer!</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="week-games-panel" id="week-2-games" data-week="2" hidden aria-label="Week 2 games">
+      <div class="week-games-header">
+        <h2 class="week-heading"><span class="week-number">2</span> Week 2</h2>
+        <button class="pill-btn orange back-weeks" type="button">⬅️ All Weeks</button>
+      </div>
+      <div class="card-grid">
+        <a class="nav-card" href="week-2/memory.html">
+          <img class="icon-img" src="../assets/images/ui/game-memory.png" alt=""><span class="label">Memory Game</span>
+          <span class="hint">Find the matching pictures!</span>
+        </a>
+        <a class="nav-card" href="week-2/spin-the-wheel.html">
+          <img class="icon-img" src="../assets/images/ui/game-wheel.png" alt=""><span class="label">Spin the Wheel</span>
+          <span class="hint">Spin, stop, and flip a card!</span>
+        </a>
+        <a class="nav-card" href="week-2/matching.html">
+          <img class="icon-img" src="../assets/images/ui/game-matching.png" alt=""><span class="label">Picture Match</span>
+          <span class="hint">Pick the picture for the sentence!</span>
+        </a>
+        <a class="nav-card" href="week-2/quiz.html">
+          <img class="icon-img" src="../assets/images/ui/game-happy.png" alt=""><span class="label">Happy Quiz</span>
+          <span class="hint">Help the farmer!</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="week-games-panel" id="week-3-games" data-week="3" hidden aria-label="Week 3 games">
+      <div class="week-games-header">
+        <h2 class="week-heading"><span class="week-number">3</span> Week 3</h2>
+        <button class="pill-btn orange back-weeks" type="button">⬅️ All Weeks</button>
+      </div>
+      <div class="card-grid">
+        <a class="nav-card" href="week-3/memory.html">
+          <img class="icon-img" src="../assets/images/ui/game-memory.png" alt=""><span class="label">Memory Game</span>
+          <span class="hint">Find the matching pictures!</span>
+        </a>
+        <a class="nav-card" href="week-3/spin-the-wheel.html">
+          <img class="icon-img" src="../assets/images/ui/game-wheel.png" alt=""><span class="label">Spin the Wheel</span>
+          <span class="hint">Spin, stop, and flip a card!</span>
+        </a>
+        <a class="nav-card" href="week-3/matching.html">
+          <img class="icon-img" src="../assets/images/ui/game-matching.png" alt=""><span class="label">Matching Pairs</span>
+          <span class="hint">Match the farm items!</span>
+        </a>
+        <a class="nav-card" href="week-3/quiz.html">
+          <img class="icon-img" src="../assets/images/ui/game-happy.png" alt=""><span class="label">Happy Quiz</span>
+          <span class="hint">Help the farmer!</span>
+        </a>
+        <a class="nav-card" href="week-3/pick-the-right-one.html">
+          <img class="icon-img" src="../assets/images/ui/game-pick.png" alt=""><span class="label">Pick the Right One</span>
+          <span class="hint">Listen and choose the answer!</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="week-games-panel" id="week-4-games" data-week="4" hidden aria-label="Week 4 games">
+      <div class="week-games-header">
+        <h2 class="week-heading"><span class="week-number">4</span> Week 4</h2>
+        <button class="pill-btn orange back-weeks" type="button">⬅️ All Weeks</button>
+      </div>
+      <div class="card-grid">
+        <a class="nav-card" href="week-4/memory.html">
+          <img class="icon-img" src="../assets/images/ui/game-memory.png" alt=""><span class="label">Memory Game</span>
+          <span class="hint">Find the matching pictures!</span>
+        </a>
+        <a class="nav-card" href="week-4/spin-the-wheel.html">
+          <img class="icon-img" src="../assets/images/ui/game-wheel.png" alt=""><span class="label">Spin the Wheel</span>
+          <span class="hint">Spin, stop, and flip a card!</span>
+        </a>
+        <a class="nav-card" href="week-4/matching.html">
+          <img class="icon-img" src="../assets/images/ui/game-matching.png" alt=""><span class="label">Matching Pairs</span>
+          <span class="hint">Match the farm items!</span>
+        </a>
+        <a class="nav-card" href="week-4/quiz.html">
+          <img class="icon-img" src="../assets/images/ui/game-happy.png" alt=""><span class="label">Happy Quiz</span>
+          <span class="hint">Help the farmer!</span>
+        </a>
+        <a class="nav-card" href="week-4/pick-the-right-one.html">
+          <img class="icon-img" src="../assets/images/ui/game-pick.png" alt=""><span class="label">Pick the Right One</span>
+          <span class="hint">Listen and choose the answer!</span>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    const weekPicker = document.getElementById('week-picker');
+    const hubSubtitle = document.getElementById('hub-subtitle');
+    const weekPanels = [...document.querySelectorAll('.week-games-panel')];
+
+    function showWeek(week, updateUrl = true) {
+      weekPicker.hidden = true;
+      weekPanels.forEach(panel => {
+        panel.hidden = panel.dataset.week !== week;
+      });
+      hubSubtitle.textContent = `Week ${week} — pick a game!`;
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('week', week);
+        history.replaceState(null, '', url);
+      }
+    }
+
+    function showWeekPicker(updateUrl = true) {
+      weekPicker.hidden = false;
+      weekPanels.forEach(panel => { panel.hidden = true; });
+      hubSubtitle.textContent = 'Pick a week, then choose a game!';
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('week');
+        history.replaceState(null, '', url.pathname + url.search);
+      }
+    }
+
+    document.querySelectorAll('.week-pick-btn').forEach(button => {
+      button.addEventListener('click', () => showWeek(button.dataset.week));
+    });
+
+    document.querySelectorAll('.back-weeks').forEach(button => {
+      button.addEventListener('click', () => showWeekPicker());
+    });
+
+    const initialWeek = new URLSearchParams(window.location.search).get('week');
+    if (initialWeek && weekPanels.some(panel => panel.dataset.week === initialWeek)) {
+      showWeek(initialWeek, false);
+    }
+  </script>
+</body>
+</html>

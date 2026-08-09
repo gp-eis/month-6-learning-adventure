@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Happy Quiz - Week 2 Weather</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <style>
+    .quiz-page{max-width:1080px}.quiz-header{text-align:center;margin:10px 0 18px}.quiz-header h1{margin-bottom:6px}.quiz-shell{padding:22px;border:4px solid rgba(79,195,247,.45);border-radius:30px;background:linear-gradient(145deg,#f3fcff,#fff8e5);box-shadow:0 9px 0 rgba(79,195,247,.18)}
+    .quiz-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.quiz-prompt{margin:0;font-size:clamp(1.25rem,3vw,1.8rem);font-weight:900;color:var(--purple-d)}.score-pill{white-space:nowrap;padding:9px 16px;border-radius:999px;background:#fff;border:3px solid var(--yellow);font-weight:900}
+    .quiz-board{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(300px,1.2fr);gap:24px;align-items:stretch}.thing-options{display:grid;gap:14px}.thing-option{display:grid;grid-template-columns:112px 1fr;align-items:center;gap:14px;width:100%;padding:10px;border:4px solid #d8d1ef;border-radius:22px;background:#fff;color:var(--text);font-family:inherit;font-size:1.15rem;font-weight:900;text-align:left;cursor:pointer;box-shadow:0 6px 0 #c7bddf}.thing-option:hover{transform:translateY(-2px);border-color:var(--orange)}.thing-option img{width:112px;aspect-ratio:1;object-fit:contain;border-radius:14px;background:#effaff}.thing-option.correct{border-color:var(--green-d);background:#eaffdf}.thing-option.wrong{border-color:#e84f61;background:#fff0f2;animation:shake .25s linear 2}.weather-card{display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:500px;padding:14px;border:4px solid var(--blue);border-radius:26px;background:#fff;overflow:hidden}.weather-card img{width:100%;height:100%;min-height:0;object-fit:contain;border-radius:18px}.weather-name{margin:10px 0 0;text-align:center;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;color:var(--purple-d)}
+    .quiz-status{min-height:34px;margin:18px 0 8px;text-align:center;font-size:1.3rem;font-weight:900}.quiz-actions{display:flex;justify-content:center;gap:12px}.correct-text{color:var(--green-d)}.wrong-text{color:#d23b47}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+    @media(max-width:760px){.quiz-board{grid-template-columns:1fr}.weather-card{order:-1;min-height:0}.weather-card img{aspect-ratio:1}.thing-option{grid-template-columns:86px 1fr}.thing-option img{width:86px}}
+  </style>
+</head>
+<body>
+  <div class="page quiz-page">
+    <a class="back-link" href="../index.html?week=2">&#11013;&#65039; Week 2 Games</a>
+    <header class="quiz-header"><h1 class="big-title">&#128522; Happy Quiz</h1><p class="subtitle">What do you need for this weather?</p></header>
+    <main class="quiz-shell">
+      <div class="quiz-top"><p class="quiz-prompt" id="quiz-prompt">Choose the thing you need.</p><span class="score-pill">Score: <span id="score">0</span></span></div>
+      <section class="quiz-board" aria-label="Match weather to the thing you need">
+        <div class="thing-options" id="thing-options" aria-label="Three choices"></div>
+        <article class="weather-card"><img id="weather-image" alt=""><p class="weather-name" id="weather-name"></p></article>
+      </section>
+      <p class="quiz-status" id="quiz-status" role="status" aria-live="assertive"></p>
+      <div class="quiz-actions"><button class="pill-btn green" id="next-weather" type="button">New Weather</button></div>
+    </main>
+  </div>
+  <script src="../../js/main.js"></script>
+  <script>
+    const BASE='../../assets/images/week-2/flashcards/';
+    const ITEMS={
+      sunglasses:{label:'Sunglasses',image:BASE+'sunglasses-3d.png'},
+      boots:{label:'Rain boots',image:BASE+'rain-boots-3d.png'},
+      scarf:{label:'Scarf',image:BASE+'scarf-3d.png'},
+      gloves:{label:'Gloves',image:BASE+'gloves-3d.png'}
+    };
+    const WEATHER=[
+      {name:'Sunny',image:BASE+'sunny-3d.png',need:'sunglasses'},
+      {name:'Windy',image:BASE+'windy-3d.png',need:'scarf'},
+      {name:'Rainy',image:BASE+'raining-lightly-3d.png',need:'boots'},
+      {name:'Snowing',image:BASE+'snowing-3d.png',need:'gloves'}
+    ];
+    const options=document.getElementById('thing-options'),weatherImage=document.getElementById('weather-image'),weatherName=document.getElementById('weather-name'),status=document.getElementById('quiz-status'),scoreEl=document.getElementById('score');
+    let score=0,current=null,last='',locked=false;
+    function shuffle(a){const b=[...a];for(let i=b.length-1;i;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+    function speak(text){if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.9;speechSynthesis.speak(u)}
+    function newRound(){
+      locked=false;status.textContent='';status.className='quiz-status';
+      const pool=WEATHER.filter(w=>w.name!==last);current=pool[Math.floor(Math.random()*pool.length)];last=current.name;
+      weatherImage.src=current.image;weatherImage.alt=`${current.name} weather`;weatherName.textContent=current.name;
+      const wrong=shuffle(Object.keys(ITEMS).filter(key=>key!==current.need)).slice(0,2);options.innerHTML='';
+      shuffle([current.need,...wrong]).forEach(key=>{const item=ITEMS[key],button=document.createElement('button');button.type='button';button.className='thing-option';button.innerHTML=`<img src="${item.image}" alt=""><span>${item.label}</span>`;button.setAttribute('aria-label',item.label);button.onclick=()=>choose(button,key);options.appendChild(button)});
+      speak(`It is ${current.name.toLowerCase()}. What do you need?`);
+    }
+    function choose(button,key){
+      if(locked)return;
+      if(key===current.need){locked=true;score++;scoreEl.textContent=score;button.classList.add('correct');options.querySelectorAll('button').forEach(b=>b.disabled=true);status.textContent=`Great! I need ${ITEMS[key].label.toLowerCase()}.`;status.className='quiz-status correct-text';speak(status.textContent)}
+      else{button.classList.add('wrong');status.textContent='Try again!';status.className='quiz-status wrong-text';setTimeout(()=>button.classList.remove('wrong'),550)}
+    }
+    document.getElementById('next-weather').onclick=newRound;newRound();
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathematical Speech - Level C</title><link rel="stylesheet" href="css/styles.css"></head>
+<body>
+  <div class="floaties" aria-hidden="true"><span style="top:10%;left:7%">&#10133;</span><span style="top:18%;right:8%">&#128172;</span><span style="bottom:12%;left:10%">&#9651;</span><span style="bottom:10%;right:8%">&#61;</span></div>
+  <main class="hero"><section class="hero-card">
+    <p class="subtitle">Month 6 · Level C</p><h1 class="big-title">Mathematical Speech</h1>
+    <div class="math-row" aria-hidden="true">1 2 3 &#128172;</div>
+    <p class="subtitle">Talk about numbers, shapes, patterns, and mathematical ideas!</p>
+    <p class="subtitle" id="selected-week-label">Week 1</p>
+    <nav class="menu-buttons"><a class="big-btn blue" id="week-lesson-link" href="lessons/viewer.html?week=1&amp;page=1">&#128218; Lesson</a><a class="big-btn green" id="week-games-link" href="games/index.html?week=1">&#127918; Games</a></nav>
+    <p style="margin-top:30px"><a class="back-link" href="weeks.html">&#11013;&#65039; Choose Another Week</a></p>
+  </section></main>
+  <script>
+    const selectedWeek = Math.min(4, Math.max(1, Number(new URLSearchParams(location.search).get('week')) || 1));
+    document.getElementById('selected-week-label').textContent = `Week ${selectedWeek}`;
+    document.getElementById('week-lesson-link').href = `lessons/viewer.html?week=${selectedWeek}&page=1`;
+    const gameRoutes = {1:'games/index.html?week=1',2:'games/week-2.html',3:'games/index.html?week=3',4:'games/index.html?week=4'};
+    document.getElementById('week-games-link').href = gameRoutes[selectedWeek];
+  </script>
+  <script src="js/main.js"></script>
+</body></html>
