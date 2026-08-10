@@ -39,6 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (document.getElementById('silly-sentence')) {
+  const choiceVisuals = {
+    fast: '🐎', faster: '🦁', 'the fastest': '🐆',
+    slow: '🐢', slower: '🐌', 'the slowest': '🦥',
+    'The horse': '🐎', 'The lion': '🦁', 'The cheetah': '🐆',
+    'The turtle': '🐢', 'The snail': '🐌', 'The sloth': '🦥'
+  };
   const corrections = shuffle([
     { before: 'The horse was ', wrong: 'faster', after: '.', correct: 'fast', choices: ['fast', 'faster', 'the fastest'] },
     { before: 'The lion was ', wrong: 'fast', after: '.', correct: 'faster', choices: ['fast', 'faster', 'the fastest'] },
@@ -61,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const item = corrections[correctionIndex];
     sentence.classList.remove('correct');
     sentence.innerHTML = `${item.before}<span class="wrong-part">${item.wrong}</span>${item.after}`;
-    choices.innerHTML = shuffle(item.choices).map(choice => `<span class="choice-pair"><button class="replacement-choice" type="button" data-choice="${choice}">${choice}</button><button class="speaker-button choice-speaker" type="button" data-speak="${choice}" aria-label="Read ${choice} aloud">&#128266;</button></span>`).join('');
+    choices.innerHTML = shuffle(item.choices).map(choice => `<span class="choice-pair"><button class="replacement-choice" type="button" data-choice="${choice}"><span class="choice-visual" aria-hidden="true">${choiceVisuals[choice]}</span><span class="choice-text">${choice}</span></button><button class="speaker-button choice-speaker" type="button" data-speak="${choice}" aria-label="Read ${choice} aloud">&#128266;</button></span>`).join('');
     correctionFeedback.textContent = '';
     nextCorrection.hidden = true;
     correctionProgress.textContent = `${correctionIndex + 1} / ${corrections.length}`;
