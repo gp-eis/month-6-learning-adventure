@@ -1,6 +1,9 @@
 *
 !.gitignore
 !index.html
+!english.html
+!math/
+!math/**
 !.nojekyll
 !LevelA_Month6/
 !LevelA_Month6/**
