@@ -17,12 +17,20 @@
         <button class="fc-nav-btn" data-activity="fast">&#9889; Fast Game</button>
         <button class="fc-nav-btn" data-activity="spot">&#128294; Spot the Picture</button>
         <button class="fc-nav-btn" data-activity="sentence">&#9999;&#65039; Complete the Sentence</button>
+        <button class="fc-nav-btn phonics-nav phonics-first" data-activity="phonics">🔤 Flashcards - Phonics</button>
+        <button class="fc-nav-btn phonics-nav" data-activity="phonics-fast">⚡ Fast Game - Phonics</button>
+        <button class="fc-nav-btn phonics-nav" data-activity="phonics-spot">🔦 Spot the Picture - Phonics</button>
+        <button class="fc-nav-btn phonics-nav" data-activity="phonics-sentence">✏️ Complete the Sentence - Phonics</button>
       </nav>
       <main class="fc-main">
         <section class="fc-panel is-active" data-panel="lesson"><h2>Lesson Flashcards</h2><p>Choose a card to see it bigger.</p><div class="fc-stage" id="lesson-stage"></div><div class="fc-list" id="lesson-list"></div></section>
+        <section class="fc-panel" data-panel="phonics"><h2>Flashcards - Phonics</h2><p id="phonics-pattern"></p><div class="fc-stage phonics-stage" id="phonics-stage"></div><div class="fc-list phonics-list" id="phonics-list"></div></section>
+        <section class="fc-panel" data-panel="phonics-fast"><h2>Fast Game - Phonics</h2><p>Peek for 0.3 seconds, then say the phonics word or review sentence.</p><div class="fc-stage covered phonics-stage" id="phonics-fast-stage"></div><div class="fc-actions"><button class="pill-btn blue" id="phonics-fast-peek">Peek</button><button class="pill-btn orange" id="phonics-fast-show">Show</button><button class="pill-btn green" id="phonics-fast-next">New Card</button></div></section>
+        <section class="fc-panel" data-panel="phonics-spot"><h2>Spot the Picture - Phonics</h2><p>Move the spotlight and guess the phonics picture.</p><div class="fc-stage spot-stage phonics-stage" id="phonics-spot-stage" tabindex="0"><div class="spot-mask"></div></div><div class="fc-actions"><button class="pill-btn orange" id="phonics-spot-show">Show</button><button class="pill-btn green" id="phonics-spot-next">New Card</button></div></section>
         <section class="fc-panel" data-panel="fast"><h2>Fast Game</h2><p>Peek for 0.3 seconds, then say the word.</p><div class="fc-stage covered" id="fast-stage"></div><div class="fc-actions"><button class="pill-btn blue" id="fast-peek">Peek</button><button class="pill-btn orange" id="fast-show">Show</button><button class="pill-btn green" id="fast-next">New Card</button></div></section>
         <section class="fc-panel" data-panel="spot"><h2>Spot the Picture</h2><p>Move the spotlight and guess the card.</p><div class="fc-stage spot-stage" id="spot-stage" tabindex="0"><div class="spot-mask"></div></div><div class="fc-actions"><button class="pill-btn orange" id="spot-show">Show</button><button class="pill-btn green" id="spot-next">New Card</button></div></section>
         <section class="fc-panel" data-panel="sentence"><h2>Complete the Sentence</h2><p>Choose a card to complete the sentence.</p><div class="fc-list sentence-list" id="sentence-list"></div><p class="fc-sentence"><span id="sentence-start"></span> <span class="fc-blank" id="sentence-blank">______</span><span id="sentence-end">.</span></p><div class="fc-actions"><button class="pill-btn blue" id="sentence-reset">Try Again</button></div></section>
+        <section class="fc-panel" data-panel="phonics-sentence"><h2>Complete the Sentence - Phonics</h2><p>Choose a picture to complete the phonics sentence.</p><div class="fc-list phonics-sentence-list" id="phonics-sentence-list"></div><p class="fc-sentence phonics-complete"><span>Here is the</span> <span class="fc-blank" id="phonics-sentence-blank">______</span></p><div class="fc-actions"><button class="pill-btn blue" id="phonics-sentence-reset">Try Again</button></div></section>
       </main>
     </div>
   </div>

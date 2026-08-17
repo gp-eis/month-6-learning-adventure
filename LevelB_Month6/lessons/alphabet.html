@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Alphabet - Level B</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/alphabet.css">
+</head>
+<body>
+  <div class="floaties" aria-hidden="true">
+    <span style="top:12%;left:4%;">&#127806;</span>
+    <span style="top:68%;left:94%;">&#127793;</span>
+  </div>
+
+  <div class="page alphabet-page">
+    <a class="back-link" id="alphabet-back" href="page-01.html">&#11013;&#65039; Back to Lesson</a>
+
+    <header class="center alphabet-header">
+      <h1 class="big-title">&#128288; Alphabet</h1>
+      <p class="subtitle">Show one letter or put two letters together.</p>
+    </header>
+
+    <section class="card alphabet-card">
+      <div class="alphabet-modes" role="tablist" aria-label="Alphabet display mode">
+        <button class="alphabet-mode is-active" id="single-mode" type="button" role="tab" aria-selected="true">One Letter</button>
+        <button class="alphabet-mode" id="pair-mode" type="button" role="tab" aria-selected="false">Two Letters</button>
+      </div>
+
+      <div class="alphabet-display" aria-live="polite">
+        <div class="single-display" id="single-display">
+          <span class="letter-upper">A</span>
+        </div>
+        <div class="pair-display" id="pair-display" hidden>
+          <span class="pair-placeholder">Choose two letters</span>
+        </div>
+      </div>
+
+      <div class="single-controls" id="single-controls">
+        <button class="pill-btn orange" id="previous-letter" type="button">&#11013;&#65039; Previous</button>
+        <span class="letter-count" id="letter-count">1 of 26</span>
+        <button class="pill-btn green" id="next-letter" type="button">Next &#10145;&#65039;</button>
+      </div>
+
+      <p class="pair-help" id="pair-help" hidden>Select the first letter, then the second letter.</p>
+      <div class="alphabet-grid" id="alphabet-grid" aria-label="Choose a letter"></div>
+      <button class="pill-btn red clear-pair" id="clear-pair" type="button" hidden>Clear Two Letters</button>
+    </section>
+  </div>
+
+  <script src="../js/alphabet.js"></script>
+</body>
+</html>

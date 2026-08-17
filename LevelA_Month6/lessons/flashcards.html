@@ -13,7 +13,7 @@
     }
 
     .fc-stage:has(.fc-picture img) .fc-card {
-      grid-template-rows: minmax(0, 1fr) auto;
+      grid-template-rows: minmax(0, 1fr) auto auto;
     }
 
     .fc-stage:has(.fc-picture img) .fc-picture {
@@ -25,6 +25,99 @@
     .fc-stage:has(.fc-picture img) .fc-word {
       line-height: 1.15;
       padding-inline: 8px;
+    }
+
+    .fc-key-sentence {
+      color: #51465c;
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .fc-phonics-word {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      color: var(--purple-d);
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .fc-phonics-letter {
+      color: var(--green-d);
+      font-size: 1.55em;
+      text-shadow: 0 3px 0 #dff7c8;
+    }
+
+    .fc-thumb .phonics-mini-word {
+      display: block;
+      margin-top: 5px;
+      font-size: 1rem;
+    }
+
+    .fc-thumb .phonics-mini-word strong {
+      color: var(--green-d);
+      font-size: 1.35em;
+    }
+
+    .fc-nav-btn.phonics-nav {
+      border-color: #91d8c0;
+      background: #effff8;
+      box-shadow: 0 5px 0 #65b99d;
+    }
+
+    .fc-nav-btn.phonics-nav.is-active {
+      border-color: #37a77f;
+      background: #dcfff1;
+      box-shadow: 0 5px 0 #268867;
+    }
+
+    .fc-nav-btn.phonics-first {
+      position: relative;
+      margin-top: 12px;
+    }
+
+    .fc-nav-btn.phonics-first::before {
+      content: "Phonics";
+      position: absolute;
+      top: -19px;
+      left: 12px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: #37a77f;
+      color: #fff;
+      font-size: .7rem;
+      letter-spacing: .04em;
+    }
+
+    .phonics-stage {
+      border-color: #37a77f;
+      background: linear-gradient(145deg, #effff8, #fff8df);
+    }
+
+    .phonics-thumb {
+      border-color: #b6e8d7;
+    }
+
+    .phonics-thumb:hover,
+    .phonics-thumb.is-active {
+      border-color: #37a77f;
+      background: #effff8;
+    }
+
+    .phonics-sentence-list {
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+    }
+
+    .phonics-sentence-list .fc-thumb {
+      min-height: 205px;
+      padding: 14px;
+    }
+
+    .phonics-sentence-list .mini {
+      height: 150px;
     }
   </style>
 </head>
@@ -39,13 +132,21 @@
         <button class="fc-nav-btn" data-activity="fast">&#9889; Fast Game</button>
         <button class="fc-nav-btn" data-activity="spot">&#128294; Spot the Picture</button>
         <button class="fc-nav-btn" data-activity="sentence">&#9999;&#65039; Complete the Sentence</button>
+        <button class="fc-nav-btn phonics-nav phonics-first" data-activity="phonics">&#128292; Flashcards - Phonics</button>
+        <button class="fc-nav-btn phonics-nav" data-activity="phonics-fast">&#9889; Fast Game - Phonics</button>
+        <button class="fc-nav-btn phonics-nav" data-activity="phonics-spot">&#128294; Spot the Picture - Phonics</button>
+        <button class="fc-nav-btn phonics-nav" data-activity="phonics-sentence">&#9999;&#65039; Complete the Sentence - Phonics</button>
       </nav>
       <main class="fc-main">
         <section class="fc-panel is-active" data-panel="lesson"><h2 id="lesson-heading">Lesson Flashcards</h2><p>Choose a card to see it bigger.</p><div class="fc-stage" id="lesson-stage"></div><div class="fc-list" id="lesson-list"></div></section>
         <section class="fc-panel" data-panel="lesson-weather"><h2>Lesson Flashcard - Weather</h2><p>Learn weather words and the things you need.</p><div class="fc-stage" id="weather-stage"></div><div class="fc-list" id="weather-list"></div></section>
+        <section class="fc-panel" data-panel="phonics"><h2>Flashcards - Phonics</h2><p id="phonics-help">Choose a card and say the word.</p><div class="fc-stage phonics-stage" id="phonics-stage"></div><div class="fc-list" id="phonics-list"></div></section>
+        <section class="fc-panel" data-panel="phonics-fast"><h2>Fast Game - Phonics</h2><p>Peek for 0.3 seconds, then say the phonics word.</p><div class="fc-stage covered phonics-stage" id="phonics-fast-stage"></div><div class="fc-actions"><button class="pill-btn blue" id="phonics-fast-peek">Peek</button><button class="pill-btn orange" id="phonics-fast-show">Show</button><button class="pill-btn green" id="phonics-fast-next">New Card</button></div></section>
+        <section class="fc-panel" data-panel="phonics-spot"><h2>Spot the Picture - Phonics</h2><p>Move the spotlight and guess the phonics picture.</p><div class="fc-stage spot-stage phonics-stage" id="phonics-spot-stage" tabindex="0"><div class="spot-mask"></div></div><div class="fc-actions"><button class="pill-btn orange" id="phonics-spot-show">Show</button><button class="pill-btn green" id="phonics-spot-next">New Card</button></div></section>
         <section class="fc-panel" data-panel="fast"><h2>Fast Game</h2><p>Peek for 0.3 seconds, then say the word.</p><div class="fc-stage covered" id="fast-stage"></div><div class="fc-actions"><button class="pill-btn blue" id="fast-peek">Peek</button><button class="pill-btn orange" id="fast-show">Show</button><button class="pill-btn green" id="fast-next">New Card</button></div></section>
         <section class="fc-panel" data-panel="spot"><h2>Spot the Picture</h2><p>Move the spotlight and guess the card.</p><div class="fc-stage spot-stage" id="spot-stage" tabindex="0"><div class="spot-mask"></div></div><div class="fc-actions"><button class="pill-btn orange" id="spot-show">Show</button><button class="pill-btn green" id="spot-next">New Card</button></div></section>
         <section class="fc-panel" data-panel="sentence"><h2>Complete the Sentence</h2><p>Choose a card to complete the sentence.</p><div class="fc-list sentence-list" id="sentence-list"></div><p class="fc-sentence"><span id="sentence-start"></span> <span class="fc-blank" id="sentence-blank">______</span><span id="sentence-end">.</span></p><div class="fc-actions"><button class="pill-btn blue" id="sentence-reset">Try Again</button></div></section>
+        <section class="fc-panel" data-panel="phonics-sentence"><h2>Complete the Sentence - Phonics</h2><p>Choose the phonics picture to complete the sentence.</p><div class="fc-list sentence-list phonics-sentence-list" id="phonics-sentence-list"></div><p class="fc-sentence">I found a <span class="fc-blank" id="phonics-sentence-blank">______</span>.</p><div class="fc-actions"><button class="pill-btn blue" id="phonics-sentence-reset">Try Again</button></div></section>
       </main>
     </div>
   </div>
