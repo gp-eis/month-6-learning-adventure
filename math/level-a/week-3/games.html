@@ -1,13 +1,48 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Level A Visual Games</title><link rel="stylesheet" href="../../game-suite.css"></head><body><main class="suite"><div class="topbar"><a class="back" href="index.html">&#8592; Week 3</a><span class="score">⭐ <span id="stars">0</span></span></div><section id="menu-screen"><h1 class="suite-title" id="suite-title"></h1><p class="subtitle" id="subtitle"></p><div class="game-menu" id="game-menu"></div></section><section id="play-screen" hidden><h1 class="suite-title">Let’s Play!</h1><div class="play-card"><span class="mode-label" id="mode-label"></span><p class="prompt" id="prompt"></p><div class="scene" id="scene"></div><div class="answers" id="answers"></div><p class="message" id="message" aria-live="polite"></p><div class="controls"><button class="menu-btn" id="menu-from-play">All Games</button><button class="next" id="next" hidden>Next &#10145;</button></div></div></section><section class="finish" id="finish" hidden><div class="finish-icon">🎉🏆</div><h1 id="finish-title"></h1><p class="subtitle">You earned <strong><span id="final-stars"></span> stars!</strong></p><div class="controls"><button class="menu-btn" id="menu-from-finish">All Games</button><button class="again" id="again">Play Again</button></div></section></main><script>const GAME_CONFIG={title:'Level A Play Time!',subtitle:'Three picture games for little learners',good:['Yay! Great job! ⭐','Wonderful! 🎉','You found it! 🌟'],tryAgain:'Good try! Tap another picture. 💛',games:[
-{title:'Heavy or Light?',icon:'🐶',image:'../../assets/games/level-a-heavy-light.png',hint:'Find the heavier or lighter picture.',color:'#ffe1ec',shadow:'#e991b0',rounds:[
-{prompt:'Tap the HEAVIER animal.',scene:'<div class="scale-beam"><div class="scale-side">🐶</div><div class="scale-center">⚖️</div><div class="scale-side">🐦</div></div>',answers:[{pic:'🐶',label:'Dog'},{pic:'🐦',label:'Bird'}],correct:0},
-{prompt:'Tap the LIGHTER pet.',scene:'<div class="scale-beam"><div class="scale-side">🐱</div><div class="scale-center">⚖️</div><div class="scale-side">🐘</div></div>',answers:[{pic:'🐱',label:'Cat'},{pic:'🐘',label:'Elephant'}],correct:0},
-{prompt:'Tap the HEAVIER pet.',scene:'<div class="scale-beam"><div class="scale-side">🐕</div><div class="scale-center">⚖️</div><div class="scale-side">🐠</div></div>',answers:[{pic:'🐕',label:'Dog'},{pic:'🐠',label:'Fish'}],correct:0}]},
-{title:'Rainy Day',icon:'🌧️',image:'../../assets/games/level-a-rainy-day.png',hint:'Look at the rain and choose light or heavy.',color:'#dff4ff',shadow:'#76b9dd',rounds:[
-{prompt:'Is this LIGHT rain or HEAVY rain?',scene:'🌦️',answers:[{pic:'💧',label:'Light rain'},{pic:'🌧️',label:'Heavy rain'}],correct:0},
-{prompt:'Is this LIGHT rain or HEAVY rain?',scene:'⛈️⛈️⛈️',answers:[{pic:'💧',label:'Light rain'},{pic:'🌧️',label:'Heavy rain'}],correct:1},
-{prompt:'Which picture shows HEAVY rain?',scene:'☁️',answers:[{pic:'🌦️',label:'A little rain'},{pic:'⛈️',label:'Lots of rain'}],correct:1}]},
-{title:'Pet Balance',icon:'⚖️',image:'../../assets/games/level-a-pet-balance.png',hint:'See which pet makes the balance go down.',color:'#fff0bd',shadow:'#dda945',rounds:[
-{prompt:'Which pet makes its side go DOWN?',scene:'<div class="scale-beam"><div class="scale-side">🐈</div><div class="scale-center">⚖️</div><div class="scale-side">🦜</div></div>',answers:[{pic:'🐈',label:'Cat'},{pic:'🦜',label:'Parrot'}],correct:0},
-{prompt:'Which animal is LIGHT?',scene:'<div class="scale-beam"><div class="scale-side">🐘</div><div class="scale-center">⚖️</div><div class="scale-side">🐇</div></div>',answers:[{pic:'🐘',label:'Elephant'},{pic:'🐇',label:'Bunny'}],correct:1},
-{prompt:'Who is HEAVIER?',scene:'<div class="scale-beam"><div class="scale-side">🐕</div><div class="scale-center">⚖️</div><div class="scale-side">🐞</div></div>',answers:[{pic:'🐕',label:'Dog'},{pic:'🐞',label:'Ladybug'}],correct:0}]}]};</script><script src="../../game-suite.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Level A Week 3 Games</title>
+  <link rel="stylesheet" href="../../game-suite.css">
+  <style>
+    .pet-row{display:flex;align-items:end;justify-content:center;gap:14px;flex-wrap:wrap}.pet-picture{display:grid;place-items:center;min-width:150px;padding:12px;border:4px solid #dce8ef;border-radius:24px;background:#fff;box-shadow:0 6px 0 #b8cedb}.pet-picture small{font-size:1.05rem;font-weight:900}.pet-art{display:block;width:125px;height:125px;object-fit:contain}.answer-art{display:block;width:92px;height:92px;margin:auto;object-fit:contain}.balance{display:flex;align-items:center;justify-content:center;gap:5px;min-width:min(620px,92vw);padding:18px 10px 8px}.pan{display:grid;place-items:center;width:190px;min-height:145px;border-bottom:12px solid #df715d;border-radius:22px;background:#fff;box-shadow:0 5px 0 #e7b1a7}.pan .pet-art{width:130px;height:130px}.pan.heavy{transform:translateY(25px)}.pan.light{transform:translateY(-20px)}.stand{font-size:4rem}.pet-count{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;max-width:660px;padding:18px;border:5px solid #fff;border-radius:28px;background:#eaf8ff;box-shadow:0 7px 0 #a8cede}.count-art{width:76px;height:76px;margin:3px;object-fit:contain}.number-choice{display:grid;place-items:center;width:80px;height:80px;margin:auto;border-radius:50%;background:#fff;color:#4e7fc2;font-size:2.4rem;font-weight:900;box-shadow:0 4px 0 #9cc6df}@media(max-width:620px){.pan{width:125px;min-height:110px}.pan .pet-art{width:95px;height:95px}.stand{font-size:3rem}.count-art{width:58px;height:58px}.pet-art{width:105px;height:105px}}
+  </style>
+</head>
+<body>
+<main class="suite">
+  <div class="topbar"><a class="back" href="index.html">&#8592; Week 3</a><span class="score">&#11088; <span id="stars">0</span></span></div>
+  <section id="menu-screen"><h1 class="suite-title" id="suite-title"></h1><p class="subtitle" id="subtitle"></p><div class="game-menu" id="game-menu"></div></section>
+  <section id="play-screen" hidden><h1 class="suite-title">Let’s Play!</h1><div class="play-card"><span class="mode-label" id="mode-label"></span><p class="prompt" id="prompt"></p><div class="scene" id="scene"></div><div class="answers" id="answers"></div><p class="message" id="message" aria-live="polite"></p><div class="controls"><button class="menu-btn" id="menu-from-play">All Games</button><button class="next" id="next" hidden>Next &#10145;</button></div></div></section>
+  <section class="finish" id="finish" hidden><div class="finish-icon">&#127881;&#127942;</div><h1 id="finish-title"></h1><p class="subtitle">You earned <strong><span id="final-stars"></span> stars!</strong></p><div class="controls"><button class="menu-btn" id="menu-from-finish">All Games</button><button class="again" id="again">Play Again</button></div></section>
+</main>
+<script>
+const artPath='../../assets/games/level-a-week3/';
+const labels={dog:'Dog',cat:'Cat',poodle:'Poodle',bird:'Bird',bunny:'Bunny'};
+const art=(name,css='pet-art')=>`<img class="${css}" src="${artPath}${name}.png" alt="${labels[name]}">`;
+const pets=items=>`<div class="pet-row">${items.map(name=>`<div class="pet-picture">${art(name)}<small>${labels[name]}</small></div>`).join('')}</div>`;
+const balance=(left,right,heavySide)=>`<div class="balance"><div class="pan ${heavySide==='left'?'heavy':'light'}">${art(left)}</div><div class="stand">&#9878;&#65039;</div><div class="pan ${heavySide==='right'?'heavy':'light'}">${art(right)}</div></div>`;
+const petCount=(name,count)=>`<div class="pet-count" aria-label="${count} ${labels[name]} pictures">${Array.from({length:count},()=>art(name,'count-art')).join('')}</div>`;
+const answer=(name)=>art(name,'answer-art');
+const numberPic=(number)=>`<span class="number-choice">${number}</span>`;
+const GAME_CONFIG={title:'Level A Pet Play!',subtitle:'Three picture games about pet weights and numbers 7 to 10',good:['Yay! Great job! ⭐','Wonderful! 🎉','You found it! 🌟'],tryAgain:'Good try! Look at the pictures and tap again. 💛',games:[
+{title:'Pet Detective',icon:'🔍',image:`${artPath}dog.png`,hint:'Find the heavier or lighter pet.',color:'#ffe1ec',shadow:'#e991b0',rounds:[
+{prompt:'Look at the scale. Which pet is HEAVIER?',scene:balance('dog','cat','left'),answers:[{pic:answer('dog'),label:'Dog'},{pic:answer('cat'),label:'Cat'}],correct:0},
+{prompt:'Look at the scale. Which pet is LIGHTER?',scene:balance('poodle','cat','left'),answers:[{pic:answer('poodle'),label:'Poodle'},{pic:answer('cat'),label:'Cat'}],correct:1},
+{prompt:'The lower animal is heavy. Which animal is HEAVY?',scene:balance('dog','bird','left'),answers:[{pic:answer('dog'),label:'Dog'},{pic:answer('bird'),label:'Bird'}],correct:0},
+{prompt:'The higher animal is light. Which animal is LIGHT?',scene:balance('poodle','bunny','left'),answers:[{pic:answer('poodle'),label:'Poodle'},{pic:answer('bunny'),label:'Bunny'}],correct:1}]},
+{title:'Pet Balance',icon:'⚖️',image:`${artPath}cat.png`,hint:'Look at which side of the scale goes down.',color:'#fff0bd',shadow:'#dda945',rounds:[
+{prompt:'The lower side is heavier. Which pet is HEAVIER?',scene:balance('dog','cat','left'),answers:[{pic:answer('dog'),label:'Dog'},{pic:answer('cat'),label:'Cat'}],correct:0},
+{prompt:'The higher side is lighter. Which pet is LIGHTER?',scene:balance('poodle','cat','right'),answers:[{pic:answer('poodle'),label:'Poodle'},{pic:answer('cat'),label:'Cat'}],correct:1},
+{prompt:'Which animal makes the scale go DOWN?',scene:balance('bird','dog','right'),answers:[{pic:answer('bird'),label:'Bird'},{pic:answer('dog'),label:'Dog'}],correct:1},
+{prompt:'Which animal is LIGHTER?',scene:balance('cat','bunny','left'),answers:[{pic:answer('cat'),label:'Cat'},{pic:answer('bunny'),label:'Bunny'}],correct:1}]},
+{title:'Count the Pets',icon:'🔢',image:`${artPath}bunny.png`,hint:'Count the pet pictures from 7 to 10.',color:'#dff4ff',shadow:'#76b9dd',rounds:[
+{prompt:'How many cats do you see?',scene:petCount('cat',7),answers:[{pic:numberPic(7),label:'Seven'},{pic:numberPic(8),label:'Eight'},{pic:numberPic(9),label:'Nine'}],correct:0},
+{prompt:'How many birds do you see?',scene:petCount('bird',8),answers:[{pic:numberPic(7),label:'Seven'},{pic:numberPic(8),label:'Eight'},{pic:numberPic(9),label:'Nine'}],correct:1},
+{prompt:'How many dogs do you see?',scene:petCount('dog',9),answers:[{pic:numberPic(8),label:'Eight'},{pic:numberPic(9),label:'Nine'},{pic:numberPic(10),label:'Ten'}],correct:1},
+{prompt:'How many bunnies do you see?',scene:petCount('bunny',10),answers:[{pic:numberPic(8),label:'Eight'},{pic:numberPic(9),label:'Nine'},{pic:numberPic(10),label:'Ten'}],correct:2}]}
+]};
+</script>
+<script src="../../game-suite.js"></script>
+</body>
+</html>

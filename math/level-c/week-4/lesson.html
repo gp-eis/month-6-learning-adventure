@@ -1,1 +1,82 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lesson | Math Level C, Week 4</title><link rel="stylesheet" href="../../styles.css"></head><body><main class="wrap"><a class="back" href="index.html">&#8592; Week 4</a><header><span class="eyebrow">MATH • LEVEL C • WEEK 4</span><h1>Lesson</h1></header><section class="placeholder"><span class="content-tag">LESSON SPACE</span><div class="big">&#128214;</div><h2>Lesson Coming Soon!</h2><p>This page is ready for the Level C, Week 4 lesson materials and content.</p></section></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lesson | Math Level C, Week 4</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <style>
+    body{background:linear-gradient(145deg,#e7f5ff,#fff8da 55%,#f1eaff)}
+    .lesson-wrap{width:min(980px,96vw);margin:auto;padding:24px 0 50px;text-align:center}
+    .lesson-header{padding:18px 0 12px}
+    .lesson-header h1{font-size:clamp(2rem,5vw,3.7rem);margin:10px 0 4px}
+    .viewer{position:relative;display:grid;grid-template-columns:76px minmax(0,794px) 76px;align-items:center;justify-content:center;gap:18px;margin-top:12px}
+    .page-frame{overflow:hidden;border:7px solid #fff;border-radius:24px;background:#fff;box-shadow:0 18px 40px rgba(63,58,98,.2),0 8px 0 #79a6df}
+    .page-frame img{display:block;width:100%;height:auto}
+    .nav-btn{display:grid;place-items:center;width:68px;height:68px;border:0;border-radius:50%;background:#fff;color:#5484c7;font-size:2.2rem;font-weight:900;cursor:pointer;box-shadow:0 7px 0 #8fb5e4,0 12px 20px #3f3a6224;transition:transform .15s}
+    .nav-btn:hover:not(:disabled){transform:translateY(-4px)}
+    .nav-btn:disabled{opacity:.35;cursor:not-allowed}
+    .progress{margin:22px 0 0;font-weight:900;color:#60588a}
+    .dots{display:flex;justify-content:center;gap:9px;margin-top:12px}
+    .dot{width:14px;height:14px;padding:0;border:0;border-radius:50%;background:#c8d7ea;cursor:pointer}
+    .dot.active{background:#5d8fd0;transform:scale(1.2)}
+    @media(max-width:760px){.viewer{grid-template-columns:1fr 1fr;gap:14px}.page-frame{grid-column:1/-1;grid-row:1}.nav-btn{width:56px;height:56px;margin:auto}.prev{grid-column:1}.next{grid-column:2}.lesson-wrap .back{float:none;margin-right:auto;display:block;width:max-content}}
+  </style>
+</head>
+<body>
+  <main class="lesson-wrap">
+    <a class="back" href="index.html">&#8592; Week 4</a>
+    <header class="lesson-header">
+      <span class="eyebrow">MATH &bull; LEVEL C &bull; WEEK 4</span>
+      <h1>Lesson</h1>
+    </header>
+    <section class="viewer" aria-label="Level C Week 4 lesson pages">
+      <button class="nav-btn prev" type="button" aria-label="Previous page">&#8249;</button>
+      <div class="page-frame"><img id="lesson-page" src="assets/page-20.png" alt="Lesson page 20 of 25"></div>
+      <button class="nav-btn next" type="button" aria-label="Next page">&#8250;</button>
+    </section>
+    <p class="progress" aria-live="polite">Page <span id="current-page">20</span> of 25</p>
+    <div class="dots" aria-label="Choose a lesson page"></div>
+  </main>
+  <script>
+    const pages = [20, 21, 22, 23, 24, 25];
+    const image = document.getElementById('lesson-page');
+    const currentPage = document.getElementById('current-page');
+    const previous = document.querySelector('.prev');
+    const next = document.querySelector('.next');
+    const dots = document.querySelector('.dots');
+    let index = 0;
+
+    pages.forEach((page, pageIndex) => {
+      const dot = document.createElement('button');
+      dot.className = 'dot';
+      dot.type = 'button';
+      dot.setAttribute('aria-label', `Show page ${page}`);
+      dot.addEventListener('click', () => showPage(pageIndex));
+      dots.appendChild(dot);
+    });
+
+    function showPage(newIndex) {
+      index = Math.max(0, Math.min(pages.length - 1, newIndex));
+      const page = pages[index];
+      image.src = `assets/page-${String(page).padStart(2, '0')}.png`;
+      image.alt = `Lesson page ${page} of 25`;
+      currentPage.textContent = page;
+      previous.disabled = index === 0;
+      next.disabled = index === pages.length - 1;
+      [...dots.children].forEach((dot, dotIndex) => {
+        dot.classList.toggle('active', dotIndex === index);
+        dot.setAttribute('aria-current', dotIndex === index ? 'page' : 'false');
+      });
+    }
+
+    previous.addEventListener('click', () => showPage(index - 1));
+    next.addEventListener('click', () => showPage(index + 1));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'ArrowLeft') showPage(index - 1);
+      if (event.key === 'ArrowRight') showPage(index + 1);
+    });
+    showPage(0);
+  </script>
+</body>
+</html>

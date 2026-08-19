@@ -32,14 +32,14 @@
     </header>
     <section class="viewer" aria-label="Level A Week 3 lesson pages">
       <button class="nav-btn prev" type="button" aria-label="Previous page">&#8249;</button>
-      <div class="page-frame"><img id="lesson-page" src="assets/page-08.png" alt="Lesson page 8 of 13"></div>
+      <div class="page-frame"><img id="lesson-page" src="assets/page-14.png" alt="Lesson page 14 of 19"></div>
       <button class="nav-btn next" type="button" aria-label="Next page">&#8250;</button>
     </section>
-    <p class="progress" aria-live="polite">Page <span id="current-page">8</span> of 13</p>
+    <p class="progress" aria-live="polite">Page <span id="current-page">14</span> of 19</p>
     <div class="dots" aria-label="Choose a lesson page"></div>
   </main>
   <script>
-    const pages = [8, 9, 10, 11, 12, 13];
+    const pages = [14, 15, 16, 17, 18, 19];
     const image = document.getElementById('lesson-page');
     const currentPage = document.getElementById('current-page');
     const previous = document.querySelector('.prev');
@@ -60,7 +60,7 @@
       index = Math.max(0, Math.min(pages.length - 1, newIndex));
       const page = pages[index];
       image.src = `assets/page-${String(page).padStart(2, '0')}.png`;
-      image.alt = `Lesson page ${page} of 13`;
+      image.alt = `Lesson page ${page} of 19`;
       currentPage.textContent = page;
       previous.disabled = index === 0;
       next.disabled = index === pages.length - 1;
