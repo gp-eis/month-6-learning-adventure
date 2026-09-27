@@ -16,9 +16,9 @@ $PublisherDirectory = Join-Path $env:LOCALAPPDATA 'GPEIS Publisher'
 $CredentialPath = Join-Path $PublisherDirectory 'cloudflare-token.txt'
 $ManifestPath = Join-Path $PublisherDirectory 'month8-report-upload-manifest.json'
 $Projects = @(
-    @{ Source = 'Month8/apps/report-a'; Deploy = 'report-a-m8'; Prefix = 'report-a' },
-    @{ Source = 'Month8/apps/report-b'; Deploy = 'report-b-m8'; Prefix = 'report-b' },
-    @{ Source = 'Month8/apps/report-c'; Deploy = 'report-c-m8'; Prefix = 'report-c' }
+    @{ Source = 'Month8/apps/report-a'; Deploy = 'report-a-m8'; Prefix = 'report-a'; Repository = 'report-levelA-M8' },
+    @{ Source = 'Month8/apps/report-b'; Deploy = 'report-b-m8'; Prefix = 'report-b'; Repository = 'report-levelB-M8' },
+    @{ Source = 'Month8/apps/report-c'; Deploy = 'report-c-m8'; Prefix = 'report-c'; Repository = 'report-levelC-M8' }
 )
 
 function Get-ContentType([string]$Extension) {
@@ -210,7 +210,16 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Git commit failed. Nothing was pushed.' }
     git push origin HEAD:main
     if ($LASTEXITCODE -ne 0) { throw 'Git push failed. The deployment commit remains safely stored locally.' }
-    Write-Host 'GitHub Pages update complete.'
+    foreach ($project in $Projects) {
+        $publishBranch = "publish-$($project.Prefix)-$([DateTime]::UtcNow.ToString('yyyyMMddHHmmssfff'))"
+        git subtree split --prefix $project.Deploy --branch $publishBranch | Out-Null
+        if ($LASTEXITCODE -ne 0) { throw "Could not prepare $($project.Repository) for publishing." }
+        git push "https://github.com/gp-eis/$($project.Repository).git" "$($publishBranch):main"
+        $pushResult = $LASTEXITCODE
+        git branch -D $publishBranch | Out-Null
+        if ($pushResult -ne 0) { throw "Could not publish $($project.Repository)." }
+    }
+    Write-Host 'GitHub Pages updates complete for the three report repositories.'
 }
 finally {
     Pop-Location
