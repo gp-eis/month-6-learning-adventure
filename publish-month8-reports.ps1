@@ -17,8 +17,8 @@ $CredentialPath = Join-Path $PublisherDirectory 'cloudflare-token.txt'
 $ManifestPath = Join-Path $PublisherDirectory 'month8-report-upload-manifest.json'
 $Projects = @(
     @{ Source = 'Month8/apps/report-a'; Deploy = 'report-a-m8'; Prefix = 'report-a'; Repository = 'report-levelA-M8' },
-    @{ Source = 'Month8/apps/report-b'; Deploy = 'report-b-m8'; Prefix = 'report-b'; Repository = 'report-levelB-M8' },
-    @{ Source = 'Month8/apps/report-c'; Deploy = 'report-c-m8'; Prefix = 'report-c'; Repository = 'report-levelC-M8' }
+    @{ Source = 'Month8/apps/report-b'; Deploy = 'report-b-m8'; Prefix = 'report-b'; Repository = 'report-levelB-M8'; ExternalLevel = 'level-b' },
+    @{ Source = 'Month8/apps/report-c'; Deploy = 'report-c-m8'; Prefix = 'report-c'; Repository = 'report-levelC-M8'; ExternalLevel = 'level-c' }
 )
 
 function Get-ContentType([string]$Extension) {
@@ -96,6 +96,45 @@ function Get-PublicAssetRoot([hashtable]$Headers) {
     return "https://$($response.result.domain)"
 }
 
+function Get-ExternalAssetRelativePaths([hashtable]$Project) {
+    $paths = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    if (-not $Project.ContainsKey('ExternalLevel')) { return @() }
+
+    $questionPath = Join-Path (Join-Path $RepositoryRoot $Project.Source) 'questions-month8.js'
+    $source = [IO.File]::ReadAllText($questionPath)
+    if ($Project.ExternalLevel -eq 'level-b') {
+        foreach ($match in [regex]::Matches($source, 'pictureWord\("([^"]+)"')) {
+            [void]$paths.Add("phonics/week-1/$($match.Groups[1].Value)-3d-v1.png")
+        }
+        foreach ($match in [regex]::Matches($source, 'picturePair\("([^"]+)",\s*"([^"]+)"')) {
+            [void]$paths.Add("phonics/week-1/$($match.Groups[1].Value)-3d-v1.png")
+            [void]$paths.Add("phonics/week-1/$($match.Groups[2].Value)-3d-v1.png")
+        }
+        foreach ($match in [regex]::Matches($source, 'fc\((\d),\s*"([^"]+)"\)')) {
+            [void]$paths.Add("flashcards/week-$($match.Groups[1].Value)/$($match.Groups[2].Value)-flashcard-v1.png")
+        }
+    }
+    elseif ($Project.ExternalLevel -eq 'level-c') {
+        foreach ($match in [regex]::Matches($source, 'phonics:\[([^\]]+)\]')) {
+            $words = @([regex]::Matches($match.Groups[1].Value, '"([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
+            foreach ($word in $words[0..3]) { [void]$paths.Add("phonics/words/$word.png") }
+        }
+        $helpers = @{
+            w1s = 'flashcards/week-1/speech'
+            w2s = 'flashcards/week-2/speech'
+            w3  = 'literacy/week-3/reading'
+            w4  = 'literacy/week-4/reading'
+            w4c = 'literacy/week-4/cats'
+        }
+        foreach ($helper in $helpers.Keys) {
+            foreach ($match in [regex]::Matches($source, "$helper\(`"([^`"]+)`"\)")) {
+                [void]$paths.Add("$($helpers[$helper])/$($match.Groups[1].Value)")
+            }
+        }
+    }
+    return @($paths)
+}
+
 function Build-DeployFolders([string]$PublicRoot) {
     foreach ($project in $Projects) {
         $sourceRoot = Join-Path $RepositoryRoot $project.Source
@@ -116,14 +155,25 @@ function Build-DeployFolders([string]$PublicRoot) {
         New-Item -ItemType Directory -Path $deployRoot -Force | Out-Null
 
         $assetBase = "$PublicRoot/$($project.Prefix)/assets/"
+        $externalPlaceholder = '__GP_EXTERNAL_ASSET_ROOT__/'
+        $externalSource = $null
+        $externalBase = $null
+        if ($project.ContainsKey('ExternalLevel')) {
+            $externalSource = "../$($project.ExternalLevel)/assets/"
+            $externalBase = "$PublicRoot/$($project.Prefix)/external/$($project.ExternalLevel)/assets/"
+        }
         Get-ChildItem -LiteralPath $sourceRoot -File | Where-Object {
             $_.Extension.ToLowerInvariant() -in @('.html', '.css', '.js', '.json')
         } | ForEach-Object {
             $destination = Join-Path $deployRoot $_.Name
             $content = [IO.File]::ReadAllText($_.FullName)
+            if ($externalSource) { $content = $content.Replace($externalSource, $externalPlaceholder) }
+            $content = $content.Replace('../report-period.js', 'report-period.js')
             $content = $content.Replace('assets/', $assetBase)
+            if ($externalBase) { $content = $content.Replace($externalPlaceholder, $externalBase) }
             [IO.File]::WriteAllText($destination, $content, [Text.UTF8Encoding]::new($false))
         }
+        Copy-Item -LiteralPath (Join-Path $RepositoryRoot 'Month8/apps/report-period.js') -Destination (Join-Path $deployRoot 'report-period.js') -Force
         New-Item -ItemType File -Path (Join-Path $deployRoot '.nojekyll') -Force | Out-Null
     }
 }
@@ -150,6 +200,29 @@ foreach ($project in $Projects) {
                 Signature = $signature
                 Size = $_.Length
             })
+        }
+    }
+
+    if ($project.ContainsKey('ExternalLevel')) {
+        $externalAssetRoot = Join-Path $RepositoryRoot "Month8/apps/$($project.ExternalLevel)/assets"
+        foreach ($relativePath in Get-ExternalAssetRelativePaths $project) {
+            $fullName = Join-Path $externalAssetRoot ($relativePath -replace '/', [IO.Path]::DirectorySeparatorChar)
+            if (-not (Test-Path -LiteralPath $fullName)) {
+                throw "Missing report dependency: $fullName"
+            }
+            $file = Get-Item -LiteralPath $fullName
+            $objectKey = "$($project.Prefix)/external/$($project.ExternalLevel)/assets/$relativePath"
+            $signature = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash
+            $previous = $manifest[$objectKey]
+            if ($null -eq $previous -or $previous.signature -ne $signature) {
+                $filesToUpload.Add([pscustomobject]@{
+                    ContentType = Get-ContentType $file.Extension
+                    FullName = $file.FullName
+                    Key = $objectKey
+                    Signature = $signature
+                    Size = $file.Length
+                })
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 (() => {
   const P = "Phonics", S = "Key Sentences", R = "Reading", M = "Math";
-  const root = "../level-b/https://pub-aa69c309a877446c857c4f2564279578.r2.dev/report-b/assets/";
+  const root = "https://pub-aa69c309a877446c857c4f2564279578.r2.dev/report-b/external/level-b/assets/";
   const ph = word => `${root}phonics/week-1/${word}-3d-v1.png`;
   const fc = (week, word) => `${root}flashcards/week-${week}/${word}-flashcard-v1.png`;
 
