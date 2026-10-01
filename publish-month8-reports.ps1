@@ -179,6 +179,11 @@ function Build-DeployFolders([string]$PublicRoot) {
 }
 
 $manifest = Get-SavedManifest
+$mathSourceRoot = Join-Path $RepositoryRoot 'Month8/apps/report-b'
+$mathSelectionJson = & node -e 'const fs=require("fs"),vm=require("vm"),path=require("path");const root=process.argv[1],ctx={window:{}};vm.createContext(ctx);for(const file of ["questions-month8.js","math-month8.js"])vm.runInContext(fs.readFileSync(path.join(root,file),"utf8"),ctx);const selected=new Set();for(const week of ctx.window.LevelBMonth8Weeks)for(const q of week.questions){for(const value of [q.image,...(q.choiceImageFiles||[])])if(typeof value==="string"&&value.startsWith("assets/month8/math-groups-v2/"))selected.add(value.substring(7));}console.log(JSON.stringify([...selected]));' $mathSourceRoot
+if ($LASTEXITCODE -ne 0) { throw 'Could not identify the final Math images. Nothing was uploaded.' }
+$selectedMathPaths = @($mathSelectionJson | ConvertFrom-Json)
+if ($selectedMathPaths.Count -ne 36) { throw "Expected 36 final Math images, found $($selectedMathPaths.Count). Nothing was uploaded." }
 $filesToUpload = [System.Collections.Generic.List[object]]::new()
 foreach ($project in $Projects) {
     $sourceRoot = Join-Path $RepositoryRoot $project.Source
@@ -189,6 +194,7 @@ foreach ($project in $Projects) {
 
     Get-ChildItem -LiteralPath $assetRoot -File -Recurse | ForEach-Object {
         $relativePath = [IO.Path]::GetRelativePath($assetRoot, $_.FullName) -replace '\\', '/'
+        if ($project.Prefix -eq 'report-b' -and $relativePath.StartsWith('month8/math-groups-v2/') -and $relativePath -notin $selectedMathPaths) { return }
         $objectKey = "$($project.Prefix)/assets/$relativePath"
         $signature = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash
         $previous = $manifest[$objectKey]

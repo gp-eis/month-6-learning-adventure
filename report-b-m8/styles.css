@@ -155,7 +155,11 @@ body{background:linear-gradient(180deg,#dff7ff 0 56%,#fff7c9 82%,#dff1a8 100%)}
 @media(max-width:620px){.question-picture-pair{gap:9px;min-height:160px!important}.question-picture-pair img{height:155px;border-radius:19px}.pattern-strip.pattern-strip-five{gap:4px}.pattern-strip.pattern-strip-five .pattern-tile{width:58px;height:58px}.pattern-tile img{padding:4px}.matching-pattern-row{gap:4px}.matching-pattern-tile{width:66px;height:66px;border-radius:15px}.fixing-pattern-row{grid-template-columns:repeat(4,minmax(48px,62px));gap:13px 5px}.fixing-pattern-tile{border-radius:14px}.fixing-pattern-tile b{bottom:-8px;width:20px;height:20px;border-width:2px;font-size:9px}.choice-pattern{gap:3px}.choice-pattern img{width:46px;height:46px;border-radius:11px}.choice .choice-scene-picture{height:125px}.subtraction-objects{gap:6px}.subtraction-item{width:65px;height:65px;border-radius:16px}.subtraction-item.taken::before,.subtraction-item.taken::after{height:6px}.subtraction-equation{padding:6px 20px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .week-card-ready img{object-fit:cover;object-position:center 48%}
-.level-b-scene .cycling-friends-hero{object-fit:cover;object-position:center}
+.level-b-scene .cycling-friends-hero{object-fit:cover;object-position:center;background:none}
+/* Match Level A's tall oval welcome picture; weekly cards remain landscape. */
+.level-b-scene{aspect-ratio:auto;min-height:490px!important;height:auto;border-radius:47% 53% 55% 45%/45% 40% 60% 55%;align-self:center}
+.level-b-scene .level-badge{white-space:nowrap}
+@media(max-width:760px){.level-b-scene{margin-top:20px;min-height:450px!important}.level-b-scene .level-badge{font-size:12px;padding:8px 12px}.level-b-scene .level-badge b{font-size:14px}.level-b-scene .level-badge small{font-size:10px}}
 /* Centered route back to the matching GP English level page. */
 .gp-english-link{display:flex;align-items:center;justify-content:center;gap:9px;width:max-content;max-width:calc(100% - 24px);margin:0 auto 28px;padding:12px 21px;border:4px solid #fff;border-radius:999px;background:linear-gradient(145deg,#ffe66d,#f2b62d);color:#4f3a0c;font:900 16px "Nunito",sans-serif;text-decoration:none;box-shadow:inset 0 4px 7px rgba(255,255,255,.4),0 7px 0 #c78618,0 13px 23px rgba(79,58,12,.17);transition:.18s transform,.18s box-shadow}.gp-english-link:hover,.gp-english-link:focus-visible{transform:translateY(-3px);box-shadow:inset 0 4px 7px rgba(255,255,255,.4),0 10px 0 #c78618,0 17px 27px rgba(79,58,12,.2)}.gp-english-link:active{transform:translateY(5px);box-shadow:inset 0 3px 6px rgba(255,255,255,.35),0 2px 0 #c78618}.gp-english-link:focus-visible{outline:5px solid #c9f4b2;outline-offset:3px}
 
@@ -163,6 +167,30 @@ body{background:linear-gradient(180deg,#dff7ff 0 56%,#fff7c9 82%,#dff1a8 100%)}
 @keyframes side-next-pop{from{opacity:0;transform:translateY(-50%) scale(.78)}to{opacity:1;transform:translateY(-50%) scale(1)}}
 @media(min-width:1240px){.question-card .next-btn{position:absolute;z-index:8;left:calc(100% + 26px);top:50%;align-items:center;justify-content:center;width:142px;height:142px;min-width:0;margin:0;padding:18px;border-radius:30px;font-size:20px;line-height:1.15;white-space:normal;transform:translateY(-50%)}.question-card .next-btn.show{display:flex;animation:side-next-pop .3s cubic-bezier(.2,1.4,.5,1)}.question-card .next-btn:hover{transform:translateY(calc(-50% - 3px))}.question-card .next-btn:active{transform:translateY(calc(-50% + 5px))}}
 
-/* Dress-up planning begins after the Month 8 question set is approved. */
-#dressup-card,
-#dressup-modal{display:none!important}
+/* Dress-up rewards are available after each week's report is completed. */
+.answer-celebration{position:relative;z-index:4;transform-origin:center;will-change:transform,filter;outline:6px solid rgba(255,201,40,.45);outline-offset:5px}
+.fx-picture-cheer{animation:reportPictureCheer 2.6s ease both}
+.correct-spark-burst{position:absolute;z-index:3;inset:0;overflow:hidden;border-radius:34px;pointer-events:none}.correct-spark-burst span{position:absolute;left:50%;top:48%;color:#ffc928;font-size:32px;opacity:0;animation:reportSparkFly 1.25s ease-out calc(var(--spark)*.055s) 2}.correct-spark-burst span:nth-child(3n){color:#35c48d}.correct-spark-burst span:nth-child(3n+2){color:#24a9e6}
+@keyframes reportPictureCheer{0%,100%{transform:translateY(0) scale(1)}20%,60%{transform:translateY(-12px) scale(1.04) rotate(-1.5deg)}40%,80%{transform:translateY(-2px) scale(1.015) rotate(1.5deg)}}
+@keyframes reportSparkFly{0%{opacity:0;transform:translate(-50%,-50%) rotate(calc(var(--spark)*45deg)) translateY(0) scale(.35)}15%,70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(var(--spark)*45deg)) translateY(-180px) scale(1.15)}}
+@media(prefers-reduced-motion:reduce){.answer-celebration,.correct-spark-burst span{animation:none!important}}
+
+/* Illustrated Math groups and precise 0–10 backward-jump number lines. */
+.choice.math-group-choice .choice-scene-picture{width:100%;height:180px;max-height:180px;object-fit:contain;border-radius:12px}
+.math-group-choice>span{display:block;font-size:17px;line-height:1.25}
+.question-card:has(.math-group-choice){padding-top:28px;padding-bottom:24px}
+.question-card:has(.math-group-choice) h2{font-size:32px;margin-top:12px}
+.question-card:has(.math-group-choice) .question-hint{margin-bottom:12px}
+.question-card:has(.math-group-choice) .question-image{max-width:400px;max-height:240px;object-fit:contain}
+.choices:has(.math-group-choice){grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.math-group-choice>small{margin-top:8px}
+.report-number-line{width:100%;max-width:720px;margin:10px auto 18px;padding:12px 8px;border:3px solid #bde5f3;border-radius:24px;background:#fff}
+.report-number-line svg{display:block;width:100%;height:auto}
+.report-number-equation{font-size:clamp(24px,4vw,34px);font-weight:900;color:#17345a;margin:4px 0 8px}
+.choices:has(.number-line-choice){grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.choice.number-line-choice{font-size:34px;min-height:115px;padding:38px 12px 12px}
+.choice-wrap:has(.number-line-choice){position:relative}
+.choice-wrap:has(.number-line-choice) .choice-listen{position:absolute;top:8px;right:8px;width:42px;min-width:42px;height:42px;padding:0;border-radius:50%}
+.question-card:has(.number-line-choice){padding-top:28px;padding-bottom:24px}
+.question-card:has(.number-line-choice) h2{font-size:clamp(25px,4vw,32px)}
+@media(max-width:540px){.choice.math-group-choice .choice-scene-picture{height:145px;max-height:145px}.math-group-choice>span{font-size:15px}.question-card:has(.math-group-choice) h2{font-size:25px}.report-number-line{padding:8px 0}.report-number-line svg{min-width:0}}

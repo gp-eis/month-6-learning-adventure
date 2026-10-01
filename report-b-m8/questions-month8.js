@@ -37,7 +37,7 @@
   window.LevelBMonth8Weeks = [
     {
       title: "Where Are the Bees?", headline: "Where Are<br><em>the Busy Bees?</em>",
-      hero: fc(1, "flowers"), heroAlt: "Bees near colorful flowers", friend: "Gerry",
+      hero: "https://pub-aa69c309a877446c857c4f2564279578.r2.dev/report-b/assets/month8/heroes/week-1-bees-garden-v2.png", heroAlt: "Gerry and Penny finding bees near flowers, a garden lamp, trees, a bench, and grass", friend: "Gerry",
       questions: [
         pictureWord("bug", "mug", 0),
         pictureWord("mug", "rug", 1),
@@ -66,7 +66,7 @@
     },
     {
       title: "Honey Is Good", headline: "Why Is Honey<br><em>So Helpful?</em>",
-      hero: fc(2,"healthy"), heroAlt: "Healthy honey", friend: "Penny",
+      hero: "https://pub-aa69c309a877446c857c4f2564279578.r2.dev/report-b/assets/month8/heroes/week-2-honey-good-v2.png", heroAlt: "Coover and Wanda discovering golden honey from a honeycomb in a sunny flower garden", friend: "Penny",
       questions: [
         pictureWord("drum", "gum", 0),
         pictureWord("gum", "plum", 1),
@@ -95,7 +95,7 @@
     },
     {
       title: "What Can We Make?", headline: "What Can We Make<br><em>With Honey?</em>",
-      hero: fc(3,"pancakes"), heroAlt: "Honey pancakes", friend: "Syd",
+      hero: "https://pub-aa69c309a877446c857c4f2564279578.r2.dev/report-b/assets/month8/heroes/week-3-honey-foods-v2.png", heroAlt: "Syd and Penny making honey cake, honey pancakes, honey tea, and honey chicken in a kitchen", friend: "Syd",
       questions: [
         pictureWord("bun", "sun", 0),
         pictureWord("nun", "bun", 1),
@@ -124,7 +124,7 @@
     },
     {
       title: "Honey Helps Our Body", headline: "How Does Honey<br><em>Help Our Body?</em>",
-      hero: fc(4,"body"), heroAlt: "Honey that is good for the body", friend: "Ria",
+      hero: "https://pub-aa69c309a877446c857c4f2564279578.r2.dev/report-b/assets/month8/heroes/week-4-honey-body-v2.png", heroAlt: "Gerry, Wanda, and Penny learning about honey, with gestures toward the throat, tummy, and arm", friend: "Ria",
       questions: [
         pictureWord("bug", "bun", 0),
         pictureWord("drum", "rug", 1),

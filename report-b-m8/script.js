@@ -230,6 +230,23 @@
       });
     } catch (error) { /* The interface still works if the browser blocks Web Audio. */ }
   }
+  let correctAnimationTimer = null;
+  function stopCorrectAnswerAnimation() {
+    if (correctAnimationTimer) { clearTimeout(correctAnimationTimer); correctAnimationTimer = null; }
+    document.querySelectorAll('.answer-celebration').forEach(element => element.classList.remove('answer-celebration','fx-picture-cheer'));
+    document.querySelectorAll('.correct-spark-burst').forEach(element => element.remove());
+  }
+  function playCorrectAnswerAnimation(index) {
+    stopCorrectAnswerAnimation();
+    const selected = [...document.querySelectorAll('.choice')].find(button => Number(button.dataset.index) === index);
+    const target = !$('question-image').hidden ? $('question-image') : selected;
+    if (!target) return;
+    target.classList.add('answer-celebration','fx-picture-cheer');
+    const burst = document.createElement('div'); burst.className = 'correct-spark-burst'; burst.setAttribute('aria-hidden','true');
+    ['★','✦','●','★','✦','●','★','✦'].forEach((symbol,position) => { const sparkle = document.createElement('span'); sparkle.textContent = symbol; sparkle.style.setProperty('--spark',position); burst.appendChild(sparkle); });
+    document.querySelector('.question-card')?.appendChild(burst);
+    correctAnimationTimer = setTimeout(stopCorrectAnswerAnimation,2800);
+  }
   function selectWeek(index) {
     activeWeek = index; questions = weeks[index].questions; const week = weeks[index];
     $("week-pill").textContent = `Week ${index + 1}`;
@@ -247,6 +264,7 @@
   function renderQuestionVisual(item) {
     const visual = $("question-visual"), image = $("question-image");
     visual.innerHTML = ""; visual.className = "question-visual"; image.hidden = true; image.className = "question-image"; image.removeAttribute("src"); image.alt = "";
+    if (item.numberLine) { visual.appendChild(window.renderReportMathNumberLine(item.numberLine)); return; }
     if (typeof item.image === "string") {
       image.src = item.image; image.alt = item.imageAlt || "Question picture"; image.hidden = false;
       if (item.imageWide) image.classList.add("wide"); if (item.imageCompact) image.classList.add("compact"); if (item.imageCircle) image.classList.add("circle-cutout");
@@ -297,6 +315,8 @@
   function renderChoiceAnswer(answer, item, index) {
     answer.innerHTML = "";
     if (item.imageWide && item.choiceImageFiles) answer.classList.add("compact-picture-choice");
+    if (item.mathGroup) answer.classList.add("math-group-choice");
+    if (item.numberLine) answer.classList.add("number-line-choice");
     if (item.choiceImages?.[index]) appendPicture(answer, currentMathImages()[item.choiceImages[index]], "", "choice-picture");
     if (item.choiceImageFiles?.[index]) appendPicture(answer, item.choiceImageFiles[index], item.choiceImageAlts?.[index] || "Answer picture", "choice-picture choice-scene-picture");
     if (item.choicePatterns?.[index]) {
@@ -306,7 +326,7 @@
     const label = document.createElement("span"), helper = document.createElement("small"); label.textContent = item.choices[index]; helper.textContent = "Tap to choose"; answer.append(label, helper);
   }
   function renderQuestion() {
-    stopAnswerFx();
+    stopAnswerFx(); stopCorrectAnswerAnimation();
     const item = questions[current], correctSoFar = answers.reduce((n, a, i) => n + (a === questions[i].answer), 0);
     $("section-label").textContent = item.section; $("section-label").style.color = colors[item.section]; $("progress-label").textContent = `${current + 1} of 20`; $("progress-bar").style.width = `${(current + 1) * 5}%`; $("honey-count").textContent = correctSoFar;
     $("mascot").textContent = item.icon; $("question-tag").textContent = item.tag; $("question-text").textContent = item.q; $("question-hint").textContent = item.hint; renderQuestionVisual(item);
@@ -325,6 +345,7 @@
   }
   function choose(index) {
     if (answers[current] !== undefined) return; const item = questions[current], ok = index === item.answer; answers[current] = index;
+    if (ok) playCorrectAnswerAnimation(index);
     window.speechSynthesis?.cancel(); const answeredQuestion = current; playAnswerFx(ok ? "correct" : "wrong").then(() => { if (current === answeredQuestion && answers[current] !== undefined) speak(item.practice); }); document.querySelectorAll(".choice").forEach(button => { const value = Number(button.dataset.index); button.disabled = true; if (value === index) button.classList.add("selected", ok ? "correct" : "wrong"); if (!ok && value === item.answer) button.classList.add("reveal"); });
     $("feedback").textContent = ok ? "Sweet work! You added honey to the jar! 🍯" : "Good try! The green answer is the one to practice. 🌱"; $("feedback").classList.add(ok ? "good" : "try");
     $("practice-text").textContent = item.practice; $("practice-popup").hidden = false; $("next-btn").textContent = current === 19 ? "See my results 🎉" : "Next question →"; $("next-btn").classList.add("show");
